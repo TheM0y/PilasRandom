@@ -1,48 +1,34 @@
 import random
+import time
 
-class Pila:
-    def __init__(self, capacidad):
-        self.capacidad = capacidad
-        self.pila = []
+def mostrar_pila(pila, tope):
+    print("\nEstado actual de la pila:")
+    for i in range(len(pila) - 1, -1, -1):
+        print(f"[{pila[i]}]" if i == tope - 1 else f" {pila[i]} ")
+    print(f"TOPE -> {tope}" if tope > 0 else "PILA VACÍA")
 
-    def insertar(self, elemento):
-        if len(self.pila) < self.capacidad:
-            self.pila.append(elemento)
-            self.mostrar_estado(f"Insertar ({elemento})")
-        else:
-            print("\nLa pila está llena. No se puede insertar.")
+def main():
+    CAPACIDAD_MAXIMA = 8
+    pila = []
+    tope = 0
+    
+    for _ in range(15):  # Realizar 15 operaciones aleatorias
+        operacion = random.choice(["push", "pop"])
+        
+        if operacion == "push" and tope < CAPACIDAD_MAXIMA:
+            elemento = random.randint(1, 99)  # Números aleatorios entre 1 y 99
+            pila.append(elemento)
+            tope += 1
+            print(f"\nPUSH: Se agregó {elemento}")
+        elif operacion == "pop" and tope > 0:
+            elemento = pila.pop()
+            tope -= 1
+            print(f"\nPOP: Se eliminó {elemento}")
+        
+        mostrar_pila(pila, tope)
+        time.sleep(1)  # Pequeña pausa para visualizar cambios
+    
+    print(f"\nLa pila finalizó con {tope} elementos.")
 
-    def eliminar(self, elemento):
-        if self.pila:
-            self.pila.pop()
-            self.mostrar_estado(f"Eliminar ({elemento})")
-        else:
-            print("\nLa pila está vacía. No se puede eliminar.")
-
-    def mostrar_estado(self, operacion):
-        print(f"\nOperación: {operacion}")
-        print("Estado de la pila:")
-        for i in range(len(self.pila)-1, -1, -1):
-            print(f"| {self.pila[i]} |")
-        print("-----")
-        print(f"TOPE = {len(self.pila)}")
-
-
-# Crear una pila con capacidad para 8 elementos
-pila = Pila(8)
-
-# Operaciones disponibles
-data = [
-    ('insertar', 'X'), ('insertar', 'Y'), ('eliminar', 'Z'), 
-    ('eliminar', 'T'), ('eliminar', 'U'), ('insertar', 'V'), 
-    ('insertar', 'W'), ('eliminar', 'P'), ('insertar', 'R')
-]
-
-# Mezclar las operaciones de forma aleatoria
-random.shuffle(data)
-
-for operacion, elemento in data:
-    if operacion == 'insertar':
-        pila.insertar(elemento)
-    elif operacion == 'eliminar':
-        pila.eliminar(elemento)
+if __name__ == "__main__":
+    main()
